@@ -1,0 +1,14 @@
+domicilios-frontend/node_modules
+bin/
+include/
+lib/
+domicilios/db.sqlite3
+domicilios/apps/__pycache__
+domicilios/apps/cors
+domicilios/apps/authregister/__pycache__
+domicilios/apps/authregister/customModelManagers/
+domicilios/apps/authregister/migrations
+domicilios/apps/service/__pycache__
+domicilios/apps/service/customModelManagers/__pycache__
+domicilios/apps/service/migrations
+domicilios/domicilios/__pycache__
