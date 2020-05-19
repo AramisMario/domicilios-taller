@@ -12,7 +12,6 @@ const OrderCard = (props) =>{
             setIsOrdering(false);
         });
     },[])
-
     return(
         <React.Fragment>
             <Paper square>

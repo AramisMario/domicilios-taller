@@ -7,7 +7,7 @@ const ProductosList = () =>{
     const [productos, setProductos] = useState([]);
     const [isOrdering, setIsOrdering] = useState(false);
     const [order, setOrder] = useState({});
-    useEffect(()=>{
+    useEffect(()=>{ // se ejecuta antes de montar el componente
         const token = localStorage.getItem('token');
         axios.get('http://127.0.0.1:8000/service/productos/',{
             headers:{

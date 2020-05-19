@@ -22,8 +22,9 @@ class SignUp(APIView):
     def post(self,request, format=None):
         data = request.data.copy()
         data["password"] = hashlib.sha256(data["password"].encode()).hexdigest()
-        usuario = UsuariosSerializer(data = data)
+        usuario = UsuariosSerializerInput(data = data)
         if usuario.is_valid():
+            print(usuario.validated_data)
             usuario.save()
             usuario = Usuarios.objects.get(telefono=data["telefono"],email=data["email"])
             return Response({"token":usuario.token},status = status.HTTP_201_CREATED)
@@ -37,9 +38,7 @@ class SignIn(APIView):
         print("data: ",data)
         password = hashlib.sha256(request.data['password'].encode()).hexdigest()
         try:
-            print("encoded password: ",password)
-            usuario = Usuarios.objects.get(email = data['email'])
-            print("usuario.password: ",usuario.password)
+            usuario = Usuarios.objects.get(email = data['email'], password = password)
         except ObjectDoesNotExist:
             return Response({"mensaje":"No exite el usuario"})
         else:

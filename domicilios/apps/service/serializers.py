@@ -1,11 +1,16 @@
 from rest_framework import serializers
 from apps.service.models import *
 
-class UsuariosSerializer(serializers.ModelSerializer):
+class UsuariosSerializerOutput(serializers.ModelSerializer):
     class Meta:
         model = Usuarios
         fields = ['id','telefono','email','nombre','apellido']
-        extra_kwargs = {'password': {'write_only': True}}
+        # extra_kwargs = {'password': {'write_only': True}}
+
+class UsuariosSerializerInput(serializers.ModelSerializer):
+    class Meta:
+        model = Usuarios
+        fields = ['id','telefono','email','nombre','apellido','password']
 
 class EmpresasSerializer(serializers.ModelSerializer):
     class Meta:

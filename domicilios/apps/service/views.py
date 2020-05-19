@@ -53,6 +53,7 @@ class PedidosView(APIView):
         return Response({"pedidos":pedidos})
 
 
+
 class CancelarPedidoView(APIView):
     renderer_classes = (JSONRenderer,)
     authentication_classes = (JWTAuthentication,)

@@ -60,6 +60,7 @@ class Usuarios(Auth):
         return pedidos
 
 
+
 class Detallesdomicilio(models.Model):
     domicilios = models.ForeignKey('Domicilios', models.DO_NOTHING)
     productos = models.ForeignKey('Productos', models.DO_NOTHING)
