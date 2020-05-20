@@ -29,8 +29,8 @@ const useStyles = makeStyles((theme)=>({
       <Card className={classes.root}>
         <CardContent>
           <Box>
-              {page.page == "login" && <Login setPage={setPage}/>}
-              {page.page == "regist" && <Registration setPage={setPage}/>}
+              {page.page === "login" && <Login setPage={setPage}/>}
+              {page.page === "regist" && <Registration setPage={setPage}/>}
           </Box>
         </CardContent>
         <CardActions>

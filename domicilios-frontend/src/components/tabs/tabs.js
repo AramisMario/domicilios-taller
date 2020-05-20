@@ -38,9 +38,9 @@ export default function DisabledTabs() {
       </Tabs>
     </Paper>
     <div className={classes.results}>
-      {tabIndex == 0 && <Empresas/>}
-      {tabIndex == 1 && <Productos/>}
-      {tabIndex == 2 && <Pedidos/>}
+      {tabIndex === 0 && <Empresas/>}
+      {tabIndex === 1 && <Productos/>}
+      {tabIndex === 2 && <Pedidos/>}
     </div>
     
 

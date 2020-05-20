@@ -27,7 +27,7 @@ class DomiciliosSerializer(serializers.ModelSerializer):
     usuario = serializers.PrimaryKeyRelatedField(queryset = Usuarios.objects.all())
     class Meta:
         model = Domicilios
-        fields = ('id','usuario','estado','direccion','fecha')
+        fields = ('id','usuario','estado','direccion','fecha','pagado')
 
 class DetallesDomicilioSerializer(serializers.ModelSerializer):
 

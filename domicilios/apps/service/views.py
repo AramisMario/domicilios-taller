@@ -8,6 +8,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from apps.authregister.jwtbackend import JWTAuthentication
 from rest_framework.authentication import get_authorization_header
+from django.db import transaction
 import jwt
 import os
 # Create your views here.
@@ -114,3 +115,31 @@ class ProductosView(APIView):
         productosSerialized = ProductosSerializer(productos, many = True)
         context = {"productos":productosSerialized.data}
         return Response(context)
+
+class PagoView(APIView):
+
+    renderer_classes = (JSONRenderer,)
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = [UserPermission]
+
+    def put(self, request, format = None):
+        token = get_authorization_header(request).split()[1]
+        print(request.data)
+        try:
+            payload = jwt.decode(token,os.environ["SECRETKEY"])
+        except:
+            print("Error")
+        else:
+            usuarioId = payload["id"]
+            usuario = Usuarios.objects.get(pk=usuarioId)
+            empresa = Empresas.objects.get(pk=request.data["empresaId"])
+            domicilio = Domicilios.objects.get(pk=request.data["id"])
+            with transaction.atomic():
+                usuario.dinero = usuario.dinero - request.data["precioProducto"]
+                empresa.dinero = empresa.dinero + request.data["precioProducto"]
+                domicilio.pagado = 1
+                domicilio.save()
+                usuario.save()
+                empresa.save()
+
+            return Response({"message":"pagado"})

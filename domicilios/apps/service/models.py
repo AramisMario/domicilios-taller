@@ -37,14 +37,14 @@ class Usuarios(Auth):
     nombre = models.CharField(max_length=100)
     apellido = models.CharField(max_length=100)
     password = models.TextField()
-
+    dinero = models.FloatField(default=0)
     class Meta:
         managed = False
         db_table = 'usuarios'
 
     def pedidosPendientes(self):
         cursor = connection.cursor()
-        cursor.execute("""select d.id, d.estado, d.direccion, d.fecha, p.nombre, e.nombre
+        cursor.execute("""select d.id, d.estado, d.direccion, d.fecha, p.nombre, e.nombre, e.id, p.precio, d.pagado
                         from domicilios as d join detallesDomicilio as dd on d.id = dd.domicilios_id
                         join productos as p on p.id = dd.productos_id join empresas as e on e.id = p.empresas_id
                         where usuario_id = %s and
@@ -54,7 +54,8 @@ class Usuarios(Auth):
         for row in cursor.fetchall():
             print(row)
             pedido = {"id":row[0],"estado":row[1],"direccion":row[2],
-                    "fecha":row[3],"producto":row[4],"empresa":row[5]}
+                    "fecha":row[3],"producto":row[4],"empresa":row[5],
+                    "empresaId":row[6],"precioProducto":row[7],"pagado":row[8]}
             pedidos.append(pedido)
             print(pedidos)
         return pedidos
@@ -75,6 +76,7 @@ class Domicilios(models.Model):
     estado = models.CharField(max_length=45)
     direccion = models.CharField(max_length=100)
     fecha = models.DateTimeField()
+    pagado = models.IntegerField(default=0)
 
     class Meta:
         managed = False
@@ -89,7 +91,7 @@ class Domicilios(models.Model):
 
 class Empresas(models.Model):
     nombre = models.CharField(max_length=100)
-
+    dinero = models.FloatField(default=0)
     class Meta:
         managed = False
         db_table = 'empresas'

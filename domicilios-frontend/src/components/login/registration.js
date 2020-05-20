@@ -40,7 +40,7 @@ export default function Registration(){
       const {email, telefono, nombre, apellido, password} = userInfo;
       if((email && telefono && nombre && apellido && password) !== undefined) setIsDisabled(false);
       if((email && telefono && nombre && apellido && password) === "") setIsDisabled(true);
-    });
+    },[userInfo]);
 
     const handleChange = (e) =>{
       setUserInfo({...userInfo,[e.target.id]:e.target.value});

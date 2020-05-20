@@ -7,7 +7,7 @@ import axios from "axios";
 const  PedidosCard = (props) =>{
 
     const {pedido,setPedidos,pedidos} = props;
-
+    const [pagado, setPagado] = useState(pedido.pagado);
     const updatePedidos = () =>{
         setPedidos(pedidos.filter((domicilio)=> domicilio.id !== pedido.id ));
     }
@@ -26,6 +26,19 @@ const  PedidosCard = (props) =>{
         .catch(()=>console.log('error'));
     }
 
+    const handlePagar = () =>{
+        const token = localStorage.getItem('token');
+        axios.put('http://127.0.0.1:8000/service/pagarDomicilio/',{
+            "empresaId":pedido.empresaId,
+            "precioProducto":pedido.precioProducto,
+            "id":pedido.id
+        },{
+            headers:{
+                "authorization":"Bearer "+token,
+                "Content-Type":"application/json"
+            }
+        }).then((response)=>setPagado(1)).catch(()=>console.log("error"));
+    }
     return(
         <React.Fragment>
             <Paper square>
@@ -40,6 +53,14 @@ const  PedidosCard = (props) =>{
                 onClick={() => handleCancelar()}
             >
                     Cancelar
+            </Button>
+            <Button 
+                variant="contained" 
+                color="secondary"
+                disabled={pagado === 1  && true}
+                onClick={() => handlePagar()}
+            >
+                    {pagado === 0 ? "pagar" : "pagado"}
             </Button>
         </Paper>
         </React.Fragment>
