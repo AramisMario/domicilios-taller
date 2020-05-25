@@ -6,7 +6,7 @@ urlpatterns = [
     path('empresas/',EmpresasView.as_view()),
     path('domicilios/',DomiciliosView.as_view()),
     path('productos/',ProductosView.as_view()),
-    path('pedidos/',PedidosView.as_view()),
+    path('pedidos/',DomiciliosView.as_view()),
     path('cancelarDomicilio/',CancelarPedidoView.as_view()),
     path('pagarDomicilio/',PagoView.as_view())
 ]

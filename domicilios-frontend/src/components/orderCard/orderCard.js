@@ -25,6 +25,7 @@ const OrderCard = (props) =>{
               onChange={(e)=>setOrder({...order,direccion:e.target.value})}
               />
             <Button 
+                id="confirmarButton"
                 variant="contained" 
                 color="primary"
                 onClick={handleConfirm}

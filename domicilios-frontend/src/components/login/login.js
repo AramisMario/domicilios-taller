@@ -73,6 +73,7 @@ export default function Login(props){
               />
           <br/>
           <Button 
+            id="loginButton"
             className={classes.button} 
             variant="outlined" 
             color="primary"
@@ -81,6 +82,7 @@ export default function Login(props){
               Iniciar sesion   
             </Button>
             <Button 
+            id="registrationButton"
             className={classes.button} 
             variant="outlined" 
             color="default"

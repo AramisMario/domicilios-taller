@@ -19,10 +19,14 @@ const PedidosList = (props) =>{
         <React.Fragment>
             {pedidos.map((pedido, index)=>{
                 return(
-                    <PedidoCard key={index} 
-                    pedido={pedido} 
-                    setPedidos={setPedidos} 
-                    pedidos={pedidos}/>
+                    <div  key={index} id={"idPedido"+index} >
+                        <PedidoCard
+                            pedido={pedido} 
+                            setPedidos={setPedidos} 
+                            pedidos={pedidos}
+                        />
+                    </div>
+
                 );
             })}
         </React.Fragment>

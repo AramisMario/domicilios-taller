@@ -47,7 +47,8 @@ const  PedidosCard = (props) =>{
             <Typography variant="h6" component="p">{pedido.direccion}</Typography>
             <Typography variant="h6" component="p">{pedido.fecha}</Typography>
             <Typography variant="h6" component="p">{pedido.estado}</Typography>
-            <Button 
+            <Button
+                id="cancelar" 
                 variant="contained" 
                 color="primary"
                 onClick={() => handleCancelar()}
@@ -55,6 +56,7 @@ const  PedidosCard = (props) =>{
                     Cancelar
             </Button>
             <Button 
+                id="pagarButton"
                 variant="contained" 
                 color="secondary"
                 disabled={pagado === 1  && true}

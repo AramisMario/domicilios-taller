@@ -49,7 +49,7 @@ const ProductosList = () =>{
                     />
                 :  productos.map((producto,index) =>{
                     return(
-                        <div key={index} style={{marginBottom:'20px',marginTop:'20px'}}>
+                        <div key={index} id={"idProduct"+index} style={{marginBottom:'20px',marginTop:'20px'}}>
                             <ProductCard 
                                 producto={producto} 
                                 handleOrder={handleOrder}

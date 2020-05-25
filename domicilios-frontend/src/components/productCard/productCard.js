@@ -16,9 +16,9 @@ const ProductCard = (props) =>{
                 >
                     Ordenar
             </Button>
-            <Button variant="contained" color="secondary">
+            {/* <Button variant="contained" color="secondary">
                     Agregar al carrito
-            </Button>
+            </Button> */}
         </Paper>  
     );
 }

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from apps.service.models import *
+from rest_framework import status
 from apps.service.serializers import *
 from rest_framework.response import Response
 from apps.authregister.custompermissionclasses import *
@@ -12,6 +13,16 @@ from django.db import transaction
 import jwt
 import os
 # Create your views here.
+
+def getUserIdFromToken(request):
+    token = get_authorization_header(request).split()[1]
+    try:
+        payload = jwt.decode(token,os.environ["SECRETKEY"])
+        return payload["id"]
+    except:
+        return None
+
+
 
 class UsuariosView(APIView):
 
@@ -35,26 +46,6 @@ class EmpresasView(APIView):
         context = {"empresas":empresasSerialized.data}
         return Response(context)
 
-class PedidosView(APIView):
-    renderer_classes = (JSONRenderer,)
-    authentication_classes = (JWTAuthentication,)
-    permission_classes = [UserPermission]
-
-    def get(self, request, format = None):
-
-        token = get_authorization_header(request).split()[1]
-        try:
-            payload = jwt.decode(token,os.environ["SECRETKEY"])
-        except:
-            print("Error")
-        else:
-            usuarioId = payload["id"]
-            usuario = Usuarios.objects.get(pk=usuarioId)
-            pedidos = usuario.pedidosPendientes()
-        return Response({"pedidos":pedidos})
-
-
-
 class CancelarPedidoView(APIView):
     renderer_classes = (JSONRenderer,)
     authentication_classes = (JWTAuthentication,)
@@ -65,8 +56,6 @@ class CancelarPedidoView(APIView):
         pedido = Domicilios.objects.get(pk=pk)
         pedido.cancelarDomicilio()
         pedido.save()
-
-        print("cancelado")
         return Response({"message":"cancelado"})
 
 
@@ -80,28 +69,26 @@ class DomiciliosView(APIView):
     permission_classes = [UserPermission]
 
     def get(self, request, format = None):
-        domicilios = Domicilios.objects.all()
-        domiciliosSerialized = DomiciliosSerializer(domicilios,many=True)
-        context = {"domicilios":domiciliosSerialized.data}
-        return Response(context)
+        usuarioId = getUserIdFromToken(request)
+
+        if(usuarioId != None):
+            usuario = Usuarios.objects.get(pk=usuarioId)
+            pedidos = usuario.pedidosPendientes()
+            return Response({"pedidos":pedidos})
+        return Response(status = status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def post(self, request, format = None):
-        info = request.data
-        token = get_authorization_header(request).split()[1]
-        try:
-            payload = jwt.decode(token,os.environ["SECRETKEY"])
-        except:
-            print("Error")
-        else:
-            usuarioId = payload["id"]
-            Domicilios.customManager.registrarDomicilio(usuarioId,info["direccion"])
+        usuarioId = getUserIdFromToken(request)
+        if(usuarioId != None):
+            INFORMACION_DOMICILIO= request.data
+            Domicilios.customManager.registrarDomicilio(usuarioId,INFORMACION_DOMICILIO["direccion"])
             ultimoDomicilio = Domicilios.objects.latest('id')
-            data = {"productos":info["productoId"],"domicilios":ultimoDomicilio.id}
-            detalle = DetallesDomicilioSerializer(data=data)
+            DATA = {"productos":INFORMACION_DOMICILIO["productoId"],"domicilios":ultimoDomicilio.id}
+            detalle = DetallesDomicilioSerializer(data=DATA)
             if detalle.is_valid():
                 detalle.save()
-                return Response({"message":"saved"})
-        return Response({"algo":"algo"})
+                return Response(status = status.HTTP_201_CREATED)
+        return Response(status = status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class ProductosView(APIView):
@@ -123,14 +110,8 @@ class PagoView(APIView):
     permission_classes = [UserPermission]
 
     def put(self, request, format = None):
-        token = get_authorization_header(request).split()[1]
-        print(request.data)
-        try:
-            payload = jwt.decode(token,os.environ["SECRETKEY"])
-        except:
-            print("Error")
-        else:
-            usuarioId = payload["id"]
+        usuarioId = getUserIdFromToken(request)
+        if(usuarioId != None):
             usuario = Usuarios.objects.get(pk=usuarioId)
             empresa = Empresas.objects.get(pk=request.data["empresaId"])
             domicilio = Domicilios.objects.get(pk=request.data["id"])
@@ -141,5 +122,5 @@ class PagoView(APIView):
                 domicilio.save()
                 usuario.save()
                 empresa.save()
-
             return Response({"message":"pagado"})
+        return Response(status = status.HTTP_500_INTERNAL_SERVER_ERROR)

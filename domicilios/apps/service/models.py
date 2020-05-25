@@ -48,16 +48,14 @@ class Usuarios(Auth):
                         from domicilios as d join detallesDomicilio as dd on d.id = dd.domicilios_id
                         join productos as p on p.id = dd.productos_id join empresas as e on e.id = p.empresas_id
                         where usuario_id = %s and
-                        (d.estado = 'agendado' or d.estado= 'solicitado' or d.estado='en camino')""",[self.pk])
+                        (d.estado = 'agendado' or d.estado= 'solicitado' or d.estado='en camino') ORDER BY d.fecha DESC""",[self.pk])
 
         pedidos = []
         for row in cursor.fetchall():
-            print(row)
             pedido = {"id":row[0],"estado":row[1],"direccion":row[2],
                     "fecha":row[3],"producto":row[4],"empresa":row[5],
                     "empresaId":row[6],"precioProducto":row[7],"pagado":row[8]}
             pedidos.append(pedido)
-            print(pedidos)
         return pedidos
 
 

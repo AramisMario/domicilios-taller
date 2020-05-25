@@ -32,9 +32,9 @@ export default function DisabledTabs() {
         onChange={handleChange}
         aria-label="disabled tabs example"
       >
-        <Tab label="Empresas" />
-        <Tab label="Productos" />
-        <Tab label="Pedidos" />
+        <Tab label="Empresas" id="empresas"/>
+        <Tab label="Productos" id="productos"/>
+        <Tab label="Pedidos" id="pedidos"/>
       </Tabs>
     </Paper>
     <div className={classes.results}>

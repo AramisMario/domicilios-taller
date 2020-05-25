@@ -59,11 +59,11 @@ REST_FRAMEWORK = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'domicilios',
-        'USER':'root',
-        'PASSWORD':'root123',
-        'HOST':'localhost',
-        'PORT':'3306'
+        'NAME': os.environ["DB_DOMI_NAME"],
+        'USER':os.environ["DB_DOMI_USER"],
+        'PASSWORD':os.environ["DB_DOMI_PASS"],
+        'HOST':os.environ["DB_DOMI_HOST"],
+        'PORT':os.environ["DB_DOMI_PORT"]
     }
 }
 

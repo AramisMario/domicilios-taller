@@ -24,18 +24,16 @@ class SignUp(APIView):
         data["password"] = hashlib.sha256(data["password"].encode()).hexdigest()
         usuario = UsuariosSerializerInput(data = data)
         if usuario.is_valid():
-            print(usuario.validated_data)
             usuario.save()
             usuario = Usuarios.objects.get(telefono=data["telefono"],email=data["email"])
             return Response({"token":usuario.token},status = status.HTTP_201_CREATED)
-        return Response({"mensaje":"algo fue mal"},status = status.HTTP_400_BAD_REQUEST)
+        return Response({"mensaje":"algo fue mal"},status = status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class SignIn(APIView):
     parser_classes = (JSONParser,)
     authentication_classes = ()
     def post(self,request,format = None):
         data = request.data.copy()
-        print("data: ",data)
         password = hashlib.sha256(request.data['password'].encode()).hexdigest()
         try:
             usuario = Usuarios.objects.get(email = data['email'], password = password)
@@ -44,27 +42,3 @@ class SignIn(APIView):
         else:
             return Response({'token':usuario.token})
         return Response({'mensaje':'algo fue mal'})
-
-# class AuthPruebaReceptionist(APIView):
-#     autentication_classes = (JWTAuthentication,)
-#     permission_classes = (ReceptionistPermission,)
-#     def get(self,request, format = None):
-#         return Response({"mensaje":"te autenticaste receptionist"})
-#
-# class AuthPruebaMechanic(APIView):
-#     autentication_classes = (JWTAuthentication,)
-#     permission_classes = (MechanicsPermission,)
-#     def get(self,request, format = None):
-#         return Response({"mensaje":"te autenticaste mechanic"})
-#
-# class AuthPruebaCustomer(APIView):
-#     autentication_classes = (JWTAuthentication,)
-#     permission_classes = (CustomersPermission,)
-#     def get(self,request, format = None):
-#         return Response({"mensaje":"te autenticaste customer"})
-#
-# class AuthPruebaAdmin(APIView):
-#     autentication_classes = (JWTAuthentication,)
-#     permission_classes = (AdminPermission,)
-#     def get(self,request, format = None):
-#         return Response({"mensaje":"te autenticaste admin"})

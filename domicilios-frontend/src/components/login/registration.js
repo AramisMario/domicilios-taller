@@ -101,6 +101,7 @@ export default function Registration(){
           <br/>
           {console.log(userInfo)}
           <Button 
+          id="signUp"
           className={classes.button} 
           variant="outlined" 
           color="default"
